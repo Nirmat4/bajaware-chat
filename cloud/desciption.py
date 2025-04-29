@@ -6,6 +6,7 @@ import gc
 import time
 import torch
 from commons import db_path, data, muest_empt
+from rich import print
 conn=sqlite3.connect(db_path)
 
 def desc_search(prompt):
@@ -23,6 +24,7 @@ def desc_search(prompt):
     closest_ids=[info["CLAVE_REP"] for _, info in distances[:10]]
     # -- Con los IDs creamos el dataframe --
     response="SELECT CLAVE_REP, CLAVE_ENTIDADREGULADA, REPORTE, CLAVE_PERIODO, DESCRIPCION_ESP, VIGENTE FROM INVENTARIO_REPORTES WHERE CLAVE_REP IN ({})".format(",".join(f"'{id}'" for id in closest_ids))
+    print(f"[green3]{response}[/green3]")
     query_result=pd.read_sql_query(response, conn)
     num_rows=len(query_result)
     context=query_result.sample(n=min(10, num_rows), random_state=42)

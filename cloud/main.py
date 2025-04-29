@@ -8,6 +8,7 @@ from commons import model, prompt_llm, clean_chat
 from ollama import chat
 import subprocess
 import time
+from rich import print
 
 prompt_history, llm_history, menu="", "", ""
 while menu!="S":
@@ -38,7 +39,7 @@ while menu!="S":
     # -- Generacion de respuesta --
     llm_response=""
     for chunk in stream:
-        print(chunk['message']['content'], end='', flush=True)
+        print(f"{chunk['message']['content']}", end='', flush=True)
         llm_response+=(chunk['message']['content'])
     print()
 
