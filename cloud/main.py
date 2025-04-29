@@ -31,7 +31,7 @@ while menu!="S":
     prompt_history+=f"\n{query}\n"
     print(f"[bold magenta]hisotrial:[/]\n[magenta]{prompt_history}[/magenta]")
     final_prompt=prompt_llm(llm_history, muestreo, empty_message, prompt, context)
-    print(f"[bold magenta]prompt:[/]\n[magenta]{escape(final_prompt)}[/magenta]")
+    print(f"[bold blue]prompt:[/]\n[blue]{escape(final_prompt)}[/blue]")
     stream=chat(
         model=model,
         messages=[{
@@ -41,10 +41,10 @@ while menu!="S":
         stream=True,
     )
     # -- Generacion de respuesta --
-    print(f"[bold purple]respuesta llm:[/])")
+    print(f"[bold purple]respuesta llm:[/]")
     llm_response=""
     for chunk in stream:
-        print(f"[purple]{chunk['message']['content']}[/purple]", end='', flush=True)
+        print(f"[light_steel_blue]{chunk['message']['content']}[/light_steel_blue]", end='', flush=True)
         llm_response+=(chunk['message']['content'])
     print()
 
