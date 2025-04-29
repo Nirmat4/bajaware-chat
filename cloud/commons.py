@@ -2,7 +2,7 @@ import pickle
 import hjson
 
 sql_model="qbert"
-model="gemma3:12b"
+model="deepseek-r1"
 db_path='../database/bajaware.db'
 jina_path="../models/jina-reranker-m0"
 
