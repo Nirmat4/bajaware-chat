@@ -60,7 +60,7 @@ def prompt_llm(history, muestreo, empty_message, original_prompt, context):
     [/HISTORY]
     [INSTRUCTION]
         Eres un asistente especializado en análisis de datos financieros mexicanos. 
-        Utiliza únicamente la sección [QUESTION][/QUESTION] para responder a la consulta; allí se encuentra toda la información necesaria. 
+        Utiliza únicamente la sección [CONTEXT][/CONTEXT] para responder a la consulta; allí se encuentra la respuesta al campo [QUESTION][/QUESTION] solo hay que interpretarla. 
         Sigue estas pautas al pie de la letra:
         
         **Tono y estilo**  
