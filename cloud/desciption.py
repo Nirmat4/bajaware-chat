@@ -34,4 +34,4 @@ def desc_search(prompt):
     gc.collect()
     torch.cuda.empty_cache()
     time.sleep(1)
-    return muestreo, empty_message, response, context
+    return muestreo, empty_message, response, context.to_string(index=False)

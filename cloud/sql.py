@@ -36,4 +36,4 @@ def sql_search(prompt):
         print(f"[red]error en la ejecucion de la consulta: {e}[/red]")
     muestreo, empty_message=muest_empt(num_rows, context)
     
-    return muestreo, empty_message, response.replace("\n", ""), context
+    return muestreo, empty_message, response.replace("\n", ""), context.to_string(index=False)

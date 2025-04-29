@@ -87,6 +87,7 @@ def prompt_llm(history, muestreo, empty_message, original_prompt, context):
     [QUESTION]
         {original_prompt}
     [/QUESTION]
+    [RESPONSE]
     """
     return final_prompt
 
