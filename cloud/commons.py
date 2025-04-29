@@ -20,7 +20,6 @@ table_docs={
     "CLIENTE": f"{tables['table_client'][0]}\n{tables['table_client'][1]}",
     "CONTRATOS": f"{tables['table_contra'][0]}\n{tables['table_contra'][1]}",
     "CONTRATOS_REPORTES": f"{tables['table_contra_report'][0]}\n{tables['table_contra_report'][1]}",
-    "CONTRATOS_REPORTES_COMPUESTO": f"{tables['table_contra_report_report'][0]}\n{tables['table_contra_report_report'][1]}",
     "CONTRATOS_CLIENTES_REPORTES": f"{tables['table_client_contra_report'][0]}\n{tables['table_client_contra_report'][1]}",
 }
 table_desc={
@@ -30,7 +29,6 @@ table_desc={
     "CLIENTE": tables['table_client'][1],
     "CONTRATOS": tables['table_contra'][1],
     "CONTRATOS_REPORTES": tables['table_contra_report'][1],
-    "CONTRATOS_REPORTES_COMPUESTO": tables['table_contra_report_report'][1],
     "CONTRATOS_CLIENTES_REPORTES": tables['table_client_contra_report'][1],
 }
 
