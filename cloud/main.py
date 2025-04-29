@@ -20,6 +20,7 @@ while menu!="S":
     if not flag: prompt_history=re.sub(r' -- (VIGENTE=0|\(VIGENTE=1\))', '', prompt_history)+"\n"+format_prompt
     # -- seleccion de funcion jina --
     module=module_ranker(format_prompt)
+    print(f"[bold khaki1]modulo:[/] [khaki1]{module}[/khaki1]")
     if module=="SQL":
         muestreo, empty_message, query, context=sql_search(prompt_history)
     if module=="JIR":
@@ -27,7 +28,9 @@ while menu!="S":
     if module=="DES":
         muestreo, empty_message, query, context=desc_search(format_prompt)
     prompt_history+=f"\n{query}\n"
+    print(f"[bold magenta]hisotrial:[/]\n[magenta]{prompt_history}[/magenta]")
     final_prompt=prompt_llm(llm_history, muestreo, empty_message, prompt, context)
+    print(f"[bold magenta]prompt:[/]\n[magenta]{final_prompt}[/magenta]")
     stream=chat(
         model=model,
         messages=[{
@@ -37,9 +40,10 @@ while menu!="S":
         stream=True,
     )
     # -- Generacion de respuesta --
+    print(f"[bold purple]respuesta llm:[/])")
     llm_response=""
     for chunk in stream:
-        print(f"{chunk['message']['content']}", end='', flush=True)
+        print(f"[purple]{chunk['message']['content']}[/purple]", end='', flush=True)
         llm_response+=(chunk['message']['content'])
     print()
 
