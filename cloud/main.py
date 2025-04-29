@@ -9,6 +9,7 @@ from ollama import chat
 import subprocess
 import time
 from rich import print
+from rich.markup import escape
 
 prompt_history, llm_history, menu="", "", ""
 while menu!="S":
@@ -30,7 +31,7 @@ while menu!="S":
     prompt_history+=f"\n{query}\n"
     print(f"[bold magenta]hisotrial:[/]\n[magenta]{prompt_history}[/magenta]")
     final_prompt=prompt_llm(llm_history, muestreo, empty_message, prompt, context)
-    print(f"[bold magenta]prompt:[/]\n[magenta]{final_prompt}[/magenta]")
+    print(f"[bold magenta]prompt:[/]\n[magenta]{escape(final_prompt)}[/magenta]")
     stream=chat(
         model=model,
         messages=[{

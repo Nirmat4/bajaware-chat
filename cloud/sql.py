@@ -23,7 +23,7 @@ def sql_search(prompt):
     )
     response=""
     for chunk in stream:
-        print(f"[bold cyan]query:[/] [cyan]{chunk['message']['content']}[/cyan]", end='', flush=True)
+        print(f"[cyan]{chunk['message']['content']}[/cyan]", end='', flush=True)
         response+=(chunk['message']['content'])
     print()
     subprocess.run(['ollama', 'stop', sql_model])
