@@ -16,12 +16,13 @@ while menu!="S":
     prompt=input(">> ")
     if prompt=="S": break
     format_prompt=clean_prompt(prompt)
+    print(f"[bold bright_white]{format_prompt}[/]")
     flag=init_flag(prompt_history)
     if flag: prompt_history=format_prompt
     if not flag: prompt_history=re.sub(r' -- (VIGENTE=0|\(VIGENTE=1\))', '', prompt_history)+"\n"+format_prompt
     # -- seleccion de funcion jina --
     module=module_ranker(format_prompt)
-    print(f"[bold khaki1]modulo:[/] [khaki1]{module}[/khaki1]")
+    print(f"[bold khaki1]modulo: {module}[/]")
     if module=="SQL":
         muestreo, empty_message, query, context=sql_search(prompt_history)
     if module=="JIR":
@@ -41,7 +42,7 @@ while menu!="S":
         stream=True,
     )
     # -- Generacion de respuesta --
-    print(f"[bold purple]respuesta llm:[/]")
+    print(f"[bold light_steel_blue]respuesta llm:[/]")
     llm_response=""
     for chunk in stream:
         print(f"[light_steel_blue]{chunk['message']['content']}[/light_steel_blue]", end='', flush=True)
