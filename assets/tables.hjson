@@ -80,7 +80,7 @@
                 CONSTRAINT PK_CONTRATOS PRIMARY KEY (CLAVE_CONTRATO) -- Clave primaria que garantiza la unicidad del contrato
             )
         ''',
-    ]
+    ],
     "table_contra_report": [
         "Tabla CONTRATOS_REPORTES: almacena la relación entre contratos y reportes. Cada registro se identifica por ID_CONTRATO_REPORTES y la combinación de CLAVE_CONTRATO y CLAVE_REP como clave primaria, vinculando un contrato con un reporte específico. Incluye fechas estimadas e instaladas para QA (FECHA_ESTIMADA_QA, FECHA_INSTALADO_QA), certificación (FECHA_ESTIMADA_CERT, FECHA_CERTIFICADO) y producción (FECHA_ESTIMADA_PROD, FECHA_INSTALADO_PROD), además de la etapa del contrato (ETAPA) y un indicador de uso (EN_USO). Esta estructura permite gestionar el avance de la implementación de los reportes en los distintos entornos y su estado de uso.",
         '''
@@ -99,7 +99,7 @@
                 CONSTRAINT PK_CONTRATOS_REPORTES PRIMARY KEY (CLAVE_CONTRATO, CLAVE_REP) -- Clave primaria que garantiza la unicidad del contrato-reportes
             )
         ''',
-    ]
+    ],
     "table_report_valid": [
         "Las siguientes tablas son el cruce de las informacion es decir las diferentes correlaciones que se pueden encontrar en ambas tablas princialmente para buscar parametros que son operaciones de cada uno de los dos elementos, ademas de eso involucra la paridad de diferentes columnas como la fecha de alta, fecha de modificacion, entre otras. Estas tablas son importantes para gestionar la relación entre los reportes y las validaciones asociadas.",
         '''
@@ -146,66 +146,10 @@
                 CONSTRAINT PK_VALIDACION PRIMARY KEY CLUSTERED (CLAVE_VALIDACION) -- Clave primaria que garantiza la unicidad del registro
             )
         ''',
-    ]
-    "table_contra_report_report": [
-        "Las siguientes tablas son el cruce de las informacion es decir las diferentes correlaciones que se pueden encontrar en ambas tablas princialmente para buscar parametros que son operaciones de cada uno de los dos elementos, ademas de eso involucra la paridad de diferentes columnas como la fecha de alta, fecha de modificacion, entre otras. Estas tablas son importantes para gestionar la relación entre los contratos y los reportes asociados.",
-        '''
-            CREATE TABLE CONTRATOS_REPORTES (
-                ID_CONTRATO_REPORTES INT NOT NULL, -- Identificador único del contrato-reportes
-                CLAVE_CONTRATO VARCHAR(50) NOT NULL, -- Clave del contrato (relacionada con la tabla CONTRATOS)
-                CLAVE_REP VARCHAR(100) NOT NULL, -- Clave del reporte (relacionada con la tabla INVENTARIO_REPORTES)
-                FECHA_ESTIMADA_QA DATE NULL, -- Fecha estimada para QA
-                FECHA_INSTALADO_QA DATE NULL, -- Fecha de instalación en QA
-                FECHA_ESTIMADA_CERT DATE NULL, -- Fecha estimada para certificación
-                FECHA_CERTIFICADO DATE NULL, -- Fecha de certificación
-                FECHA_ESTIMADA_PROD DATE NULL, -- Fecha estimada para producción
-                FECHA_INSTALADO_PROD DATE NULL, -- Fecha de instalación en producción
-                ETAPA INT NULL, -- Etapa del contrato (puede ser un número entero)
-                EN_USO VARCHAR(2) NULL, -- Indicador de si el contrato está en uso (puede ser 'SI' o 'NO')
-                CONSTRAINT PK_CONTRATOS_REPORTES PRIMARY KEY (CLAVE_CONTRATO, CLAVE_REP) -- Clave primaria que garantiza la unicidad del contrato-reportes
-            )
-
-            CREATE TABLE INVENTARIO_REPORTES (
-                ID_INVENTARIO_REPORTE int NOT NULL, -- ID interno del inventario
-                CLAVE_REP varchar(100) NOT NULL, -- Clave única expandida del reporte contiene informacion basica
-                CLAVE_PAIS varchar(10) NULL, -- Clave del pais
-                CLAVE_ENTIDADREGULADA varchar(10) NULL, -- Clave de entidad regulada
-                CLAVE_REG varchar(10) NULL, -- Clave del regulador
-                CLAVE_SERIE varchar(15) NULL, -- Clave de serie
-                SUBSERIE varchar(15) NULL, -- Clave de subserie
-                CLAVE_GRUPO varchar(15) NULL, -- Clave de grupo de reportes
-                REPORTE varchar(100) NULL, -- Nombre del reporte
-                CLAVE_SECCION_REP varchar(50) NULL, -- Sección del reporte
-                CLAVE_VERSION_REPORTE varchar(3) NULL, -- Versión del reporte
-                CLAVE_PERIODO varchar(15) NULL, -- Periodo del reporte (peiodicidad del reporte)
-                DESCRIPCION_ESP varchar(500) NULL, -- Descripción del reporte
-                CLAVE_FECHA_ENT_REP varchar(100) NULL, -- Fecha esperada de entrega
-                CARACTERISTICAS varchar(500) NULL, -- Características del reporte
-                CLAVE_REGULACION_REP varchar(50) NULL, -- Normativa o regulación asociada
-                FECHA_ALTA datetime NULL, -- Fecha de alta
-                FECHA_ACTUALIZADA datetime NULL, -- Fecha de actualización
-                CLAVE_REP_GENERAL varchar(100) NULL, -- Clave general de agrupación
-                CLASIFICACION date NULL, -- Clasificación por fecha
-                VIGENTE INTEGER NULL, -- Indicador de vigencia puede ser 1 o 0 (NULL)
-                CONSTRAINT PK_CLAVE_REP PRIMARY KEY (CLAVE_REP)
-            )
-        '''
-    ]
+    ],
     "table_client_contra_report": [
-        "Las siguientes tablas son las diferentes correlaciones que surgen de las tablas CLIENTE, CONTRATOS_REPORTES y CONTRATOS. Estas tablas son importantes para gestionar la relación entre los clientes, los contratos y los reportes asociados.",
+        "Las siguientes tablas son las diferentes correlaciones que surgen de las tablas CONTRATOS_REPORTES y CONTRATOS. Estas tablas son importantes para gestionar la relación entre los clientes, los contratos y los reportes asociados.",
         ''' 
-            CREATE TABLE CLIENTE (
-                ID_CLIENTE INT NOT NULL, -- Indentificador único del cliente
-                CLAVE_CLIENTE VARCHAR(50) NOT NULL, -- Clave única del cliente
-                NOMBRE_CLIENTE VARCHAR(250) NOT NULL, -- Nombre del cliente
-                CLAVE_PAIS VARCHAR(10) NOT NULL, -- Clave del país
-                DIRECCION VARCHAR(1000) NULL, -- Dirección del cliente
-                FECHA_ALTA DATETIME NOT NULL, -- Fecha de alta del cliente
-                FECHA_MODIFICA DATETIME NOT NULL, -- Fecha de modificación del cliente
-                ACTIVO INT NULL, -- Indicador de si el cliente está activo (1) o inactivo (0)
-                CONSTRAINT PK_CLIENTE PRIMARY KEY (CLAVE_CLIENTE) -- Clave primaria que garantiza la unicidad del cliente
-            )
-            
             CREATE TABLE CONTRATOS_REPORTES (
                 ID_CONTRATO_REPORTES INT NOT NULL, -- Identificador único del contrato-reportes
                 CLAVE_CONTRATO VARCHAR(50) NOT NULL, -- Clave del contrato (relacionada con la tabla CONTRATOS)
