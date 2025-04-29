@@ -2,7 +2,7 @@ import pickle
 import hjson
 
 sql_model="qbert"
-model="deepseek-r1"
+model="gemma3:12b"
 db_path='../database/bajaware.db'
 jina_path="../models/jina-reranker-m0"
 
@@ -92,7 +92,7 @@ def prompt_llm(history, muestreo, empty_message, original_prompt, context):
 
 def clean_chat(llm_response, llm_history, prompt):
     llm_response=llm_response.split('</think>')[-1].replace('\n\n', '\n')
-    llm_history+=f"[USER]\n{prompt}\n[/USER]\n[DEEPSEK]\n{llm_response}\n[/DEEPSEK]\n"
+    llm_history+=f"[USER]\n{prompt}\n[/USER]\n[ASSISTANT]\n{llm_response}\n[/ASSISTANT]\n"
     return llm_history
 
 def muest_empt(num_rows, df):
