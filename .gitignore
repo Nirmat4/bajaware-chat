@@ -1,3 +1,7 @@
+# Carpetas de modelos y bases de datos
+models/
+database/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

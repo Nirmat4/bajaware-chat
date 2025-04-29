@@ -1,0 +1,67 @@
+from ollama import chat
+
+query="De los contratos de esos clientes, que clientes tienen el reporte CLAVE_REP MX_SOF_R28A_2814_00 contratado?"
+table="""
+CREATE TABLE CONTRATOS_REPORTES (
+    ID_CONTRATO_REPORTES INT NOT NULL, -- Identificador único del contrato-reportes
+    CLAVE_CONTRATO VARCHAR(50) NOT NULL, -- Clave del contrato (relacionada con la tabla CONTRATOS)
+    CLAVE_REP VARCHAR(100) NOT NULL, -- Clave del reporte (relacionada con la tabla INVENTARIO_REPORTES)
+    FECHA_ESTIMADA_QA DATE NULL, -- Fecha estimada para QA
+    FECHA_INSTALADO_QA DATE NULL, -- Fecha de instalación en QA
+    FECHA_ESTIMADA_CERT DATE NULL, -- Fecha estimada para certificación
+    FECHA_CERTIFICADO DATE NULL, -- Fecha de certificación
+    FECHA_ESTIMADA_PROD DATE NULL, -- Fecha estimada para producción
+    FECHA_INSTALADO_PROD DATE NULL, -- Fecha de instalación en producción
+    ETAPA INT NULL, -- Etapa del contrato (puede ser un número entero)
+    EN_USO VARCHAR(2) NULL, -- Indicador de si el contrato está en uso (puede ser 'SI' o 'NO')
+    CONSTRAINT PK_CONTRATOS_REPORTES PRIMARY KEY (CLAVE_CONTRATO, CLAVE_REP) -- Clave primaria que garantiza la unicidad del contrato-reportes
+)
+
+CREATE TABLE CONTRATOS (
+    ID_CONTRATO INT NOT NULL, -- Identificador único del contrato
+    CLAVE_CONTRATO VARCHAR(50) NOT NULL, -- Clave del contrato
+    NOMBRE_CONTRATO VARCHAR(100) NOT NULL, -- Nombre del contrato
+    FECHA_ALTA DATE NOT NULL, -- Fecha de alta del contrato
+    FECHA_MODIFICA DATE NOT NULL, -- Fecha de ultima modificación del contrato
+    CLAVE_CLIENTE VARCHAR(50) NULL, -- Fecha de cliente
+    CLAVE_PLATAFORMA VARCHAR(10) NULL, -- Clave de la plataforma java o net
+    CONSTRAINT PK_CONTRATOS PRIMARY KEY (CLAVE_CONTRATO) -- Clave primaria que garantiza la unicidad del contrato
+)
+"""
+instructions="Your task is to generate valid duckdb SQL to answer the following question, given a duckdb database schema."
+
+prompt=f"""### Instruction:
+{instructions}
+
+### Input:
+Here is the database schema that the SQL query will run on:
+{table}
+
+### Question:
+{query}
+
+### Response (use duckdb shorthand if possible):"""
+
+test=f"""
+<|begin_of_text|><|start_header_id|>user<|end_header_id|>
+
+Generate a SQL query to answer this question: `{query}`
+{instructions}
+
+DDL statements:
+{table}<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+The following SQL query best answers the question `{query}`:
+```sql
+"""
+
+# Generar una respuesta
+response = chat(
+    model='qbert',
+    messages=[{
+        'role': 'user',
+        'content': prompt
+    }]
+)
+
+print(response.message.content)
