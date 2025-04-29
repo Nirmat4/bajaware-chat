@@ -10,7 +10,7 @@ conn=sqlite3.connect(db_path)
 
 def sql_search(prompt):
     table=choose_table(prompt)
-    print(f"[bold orange1]tabla:[/] [orange1]{table}[/orange1]")
+    print(f"[bold orange1]tabla:[/]\n[orange1]{table}[/orange1]")
     text=prompt_sql(prompt, table)
     # -- Generacion de consulta SQL --
     stream=chat(
@@ -23,7 +23,7 @@ def sql_search(prompt):
     )
     response=""
     for chunk in stream:
-        print(f"[bold cyan]query:[/] [cyan]{['message']['content']}[/cyan]", end='', flush=True)
+        print(f"[bold cyan]query:[/] [cyan]{chunk['message']['content']}[/cyan]", end='', flush=True)
         response+=(chunk['message']['content'])
     print()
     subprocess.run(['ollama', 'stop', sql_model])
