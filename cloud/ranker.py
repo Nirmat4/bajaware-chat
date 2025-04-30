@@ -10,7 +10,7 @@ jina=AutoModel.from_pretrained(
     torch_dtype=torch.float16, 
     local_files_only=True
 ).to("cpu")
-tokenizer_jina=AutoTokenizer.from_pretrained(jina_path, trust_remote_code=True)
+tokenizer_jina=AutoTokenizer.from_pretrained(jina_path, trust_remote_code=True, use_fast=False)
 
 def module_ranker(prompt: str) -> str:
     pairs=[[prompt, schema] for schema in modules.values()]
