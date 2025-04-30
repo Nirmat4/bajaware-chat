@@ -20,6 +20,7 @@ def module_ranker(prompt: str) -> str:
         scores=jina.compute_score(pairs, max_length=1024, doc_type="text")
 
     jina.to("cpu")
+    torch.cuda.empty_cache()
     best_idx=int(torch.argmax(torch.tensor(scores, device="cpu")))
     return list(modules.keys())[best_idx]
 
@@ -31,6 +32,7 @@ def choose_table(query: str) -> str:
         scores=jina.compute_score(pairs, max_length=1024, doc_type="text")
 
     jina.to("cpu")
+    torch.cuda.empty_cache()
     best_idx=int(torch.argmax(torch.tensor(scores, device="cpu")))
     choose=list(table_docs.keys())[best_idx]
     return table_desc[choose]
