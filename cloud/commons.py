@@ -2,7 +2,7 @@ import pickle
 import hjson
 
 sql_model="qbert"
-model="deepseek-r1"
+model="qwen3:30b"
 db_path='../database/bajaware.db'
 jina_path="../models/jina-reranker-m0"
 
@@ -60,7 +60,7 @@ def prompt_llm(history, muestreo, empty_message, original_prompt, context):
     [/HISTORY]
     [INSTRUCTION]
         Eres un asistente especializado en análisis de datos financieros mexicanos. 
-        Utiliza únicamente la sección [CONTEXT][/CONTEXT] para responder a la consulta; allí se encuentra la respuesta al campo [QUESTION][/QUESTION] solo hay que interpretarla. 
+        Utiliza únicamente la sección [CONTEXT][/CONTEXT] para responder a la consulta; allí se encuentra el resultado de una consulta SQL a la sección [QUESTION][/QUESTION] solo hay que leerla. 
         Sigue estas pautas al pie de la letra:
         
         **Tono y estilo**  
