@@ -25,6 +25,8 @@ while menu!="S":
     print(f"[bold khaki1]modulo: {module}[/]")
     if module=="JIR":
         print(module)
+    if module=="GEN":
+        print(module)
     if module=="SQL" or module=="DES":
         if module=="SQL": muestreo, empty_message, query, context=sql_search(prompt_history)
         if module=="DES": muestreo, empty_message, query, context=desc_search(format_prompt)
