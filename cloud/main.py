@@ -23,34 +23,33 @@ while menu!="S":
     # -- seleccion de funcion jina --
     module=module_ranker(format_prompt)
     print(f"[bold khaki1]modulo: {module}[/]")
-    if module=="SQL":
-        muestreo, empty_message, query, context=sql_search(prompt_history)
     if module=="JIR":
         print(module)
-    if module=="DES":
-        muestreo, empty_message, query, context=desc_search(format_prompt)
-    prompt_history+=f"\n{query}\n"
-    print(f"[bold magenta]hisotrial:[/]\n[magenta]{prompt_history}[/magenta]")
-    final_prompt=prompt_llm(llm_history, muestreo, empty_message, prompt, context)
-    print(f"[bold blue]prompt:[/]\n[blue]{escape(final_prompt)}[/blue]")
-    stream=chat(
-        model=model,
-        messages=[{
-            'role': 'user',
-            'content': final_prompt
-        }],
-        stream=True,
-    )
-    # -- Generacion de respuesta --
-    print(f"[bold light_steel_blue]respuesta llm:[/]")
-    llm_response=""
-    for chunk in stream:
-        print(f"[light_steel_blue]{chunk['message']['content']}[/light_steel_blue]", end='', flush=True)
-        llm_response+=(chunk['message']['content'])
-    print()
+    if module=="SQL" or module=="DES":
+        if module=="SQL": muestreo, empty_message, query, context=sql_search(prompt_history)
+        if module=="DES": muestreo, empty_message, query, context=desc_search(format_prompt)
+        prompt_history+=f"\n{query}\n"
+        print(f"[bold magenta]hisotrial:[/]\n[magenta]{prompt_history}[/magenta]")
+        final_prompt=prompt_llm(llm_history, muestreo, empty_message, prompt, context)
+        print(f"[bold blue]prompt:[/]\n[blue]{escape(final_prompt)}[/blue]")
+        stream=chat(
+            model=model,
+            messages=[{
+                'role': 'user',
+                'content': final_prompt
+            }],
+            stream=True,
+        )
+        # -- Generacion de respuesta --
+        print(f"[bold light_steel_blue]respuesta llm:[/]")
+        llm_response=""
+        for chunk in stream:
+            print(f"[light_steel_blue]{chunk['message']['content']}[/light_steel_blue]", end='', flush=True)
+            llm_response+=(chunk['message']['content'])
+        print()
 
-    llm_history=clean_chat(llm_response, llm_history, prompt)
+        llm_history=clean_chat(llm_response, llm_history, prompt)
 
-    # -- Eliminacion de la memoria --
-    subprocess.run(['ollama', 'stop', model])
-    time.sleep(1)
+        # -- Eliminacion de la memoria --
+        subprocess.run(['ollama', 'stop', model])
+        time.sleep(1)

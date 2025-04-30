@@ -2,7 +2,7 @@ import pickle
 import hjson
 
 sql_model="qbert"
-model="qwen3:30b"
+model="qwen3:30b-a3b"
 db_path='../database/bajaware.db'
 jina_path="../models/jina-reranker-m0"
 
