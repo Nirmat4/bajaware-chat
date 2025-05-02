@@ -2,7 +2,7 @@ import pickle
 import hjson
 import torch
 
-device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device=torch.device("cpu")
 
 sql_model="qbert"
 model="qwen3:30b-a3b"
