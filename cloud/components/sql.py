@@ -15,12 +15,13 @@ def sql_search(prompt):
     if choose=="GENERALES":
         prompt=f"{history_prompt[-1]}{prompt}"
         table=f"{history_table[-1]}"
-        print(f"[bold purple]prompt:[/] [purple]{prompt}[/]")
+        print(f"[bold purple]prompt:[/]\n[purple]{prompt}[/]")
         print(f"[bold orange1]tabla:[/]\n[orange1]{table}[/]")
         text=prompt_sql(prompt, table)
     else:
         table=table_desc[choose]
-        print(f"[bold purple]prompt:[/] [purple]{prompt}[/]")
+        prompt=f"{history_prompt[-1]}{prompt}"
+        print(f"[bold purple]prompt:[/]\n[purple]{prompt}[/]")
         print(f"[bold orange1]tabla:[/]\n[orange1]{table}[/]")
         text=prompt_sql(prompt, table)
 
