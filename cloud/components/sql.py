@@ -12,6 +12,7 @@ history_prompt=[]
 history_table=[]
 def sql_search(prompt):
     choose=choose_table(prompt)
+    original_prompt=prompt
     if choose=="GENERALES":
         if len(history_prompt)>0: prompt=f"{history_prompt[-1]}{prompt}"
         prompt=f"{history_prompt[-1]}{prompt}"
@@ -50,7 +51,7 @@ def sql_search(prompt):
         print(f"[red]error en la ejecucion de la consulta: {e}[/red]")
     muestreo, empty_message=muest_empt(num_rows, context)
     response=response.replace("\n", "")
-    history_prompt.append(f"{prompt}\n{response}\n\n")
+    history_prompt.append(f"{original_prompt}\n{response}\n\n")
     history_table.append(table)
     
     return muestreo, empty_message, response, context.to_string(index=False)
