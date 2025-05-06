@@ -15,8 +15,8 @@ def sql_search(prompt):
     original_prompt=prompt
     if choose=="GENERALES":
         if len(history_prompt)>0: prompt=f"{history_prompt[-1]}{prompt}"
-        prompt=f"{history_prompt[-1]}{prompt}"
-        table=f"{history_table[-1]}"
+        table=""
+        if len(history_table)>0: table=f"{history_table[-1]}"
         print(f"[bold purple]prompt:[/]\n[purple]{prompt}[/]")
         print(f"[bold orange1]tabla:[/]\n[orange1]{table}[/]")
         text=prompt_sql(prompt, table)
