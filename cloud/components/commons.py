@@ -24,6 +24,7 @@ table_docs={
     "CONTRATOS": f"{tables['table_contra'][0]}\n{tables['table_contra'][1]}",
     "CONTRATOS_REPORTES": f"{tables['table_contra_report'][0]}\n{tables['table_contra_report'][1]}",
     "CONTRATOS_CLIENTES_REPORTES": f"{tables['table_client_contra_report'][0]}\n{tables['table_client_contra_report'][1]}",
+    "GENERALES": f"{tables['general_quest']}"
 }
 table_desc={
     "INVENTARIO_REPORTES": tables['table_reports'][1],
