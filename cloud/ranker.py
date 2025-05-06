@@ -2,7 +2,7 @@ from transformers import AutoTokenizer, AutoModel
 import torch
 import gc
 import time
-from cloud.components.commons import modules, table_docs, table_desc, jina_path, device
+from components.commons import modules, table_docs, table_desc, jina_path, device
 
 jina=AutoModel.from_pretrained(
     jina_path, 

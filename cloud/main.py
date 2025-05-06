@@ -1,9 +1,9 @@
 from nlpModel import clean_prompt
-from cloud.components.commons import init_flag
+from components.commons import init_flag
 from components.sql import sql_search
 from components.desciption import desc_search
 import re
-from cloud.components.commons import model, prompt_llm, clean_chat
+from components.commons import model, prompt_llm, clean_chat
 from ollama import chat
 import subprocess
 import time
