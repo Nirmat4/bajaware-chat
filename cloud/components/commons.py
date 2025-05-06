@@ -4,7 +4,7 @@ import torch
 
 device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-sql_model="qbert"
+sql_model="qbert-8b"
 model="qwen3:30b-a3b"
 db_path='../database/bajaware.db'
 jina_path="../models/jina-reranker-m0"
