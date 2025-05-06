@@ -14,13 +14,17 @@ def sql_search(prompt):
     choose=choose_table(prompt)
     if choose=="GENERALES":
         prompt=f"{history_prompt[-1]}{prompt}"
-        table=f"{history_table}"
-        print(f"[bold orange1]tabla:[/]\n[orange1]{table}[/orange1]")
+        table=f"{history_table[-1]}"
+        print(f"[bold purple]prompt:[/] [purple]{prompt}[/]")
+        print(f"[bold orange1]tabla:[/]\n[orange1]{table}[/]")
         text=prompt_sql(prompt, table)
     else:
         table=table_desc[choose]
-        print(f"[bold orange1]tabla:[/]\n[orange1]{table}[/orange1]")
+        print(f"[bold purple]prompt:[/] [purple]{prompt}[/]")
+        print(f"[bold orange1]tabla:[/]\n[orange1]{table}[/]")
         text=prompt_sql(prompt, table)
+
+
     stream=chat(
         model=sql_model,
         messages=[{
