@@ -5,7 +5,7 @@ import sqlite3
 import gc
 import time
 import torch
-from commons import db_path, data, muest_empt
+from cloud.components.commons import db_path, data, muest_empt
 from rich import print
 conn=sqlite3.connect(db_path)
 

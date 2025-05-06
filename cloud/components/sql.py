@@ -4,7 +4,7 @@ from ollama import chat
 import time
 import sqlite3
 import pandas as pd
-from commons import db_path, prompt_sql, sql_model, muest_empt
+from cloud.components.commons import db_path, prompt_sql, sql_model, muest_empt
 from rich import print
 conn=sqlite3.connect(db_path)
 
