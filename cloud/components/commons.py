@@ -63,7 +63,7 @@ def prompt_llm(history, muestreo, empty_message, original_prompt, context):
     [/HISTORY]
     [INSTRUCTION]
         Eres un asistente especializado en análisis de datos financieros mexicanos. 
-        Utiliza únicamente la sección [CONTEXT][/CONTEXT] para responder a la consulta; allí se encuentra el resultado de una consulta SQL a la sección [QUESTION][/QUESTION] solo hay que leerla. 
+        En la sección [CONTEXT][/CONTEXT] se encuentra el resultado de una consulta SQL a la sección [QUESTION][/QUESTION] solo hay que leerla para el usuario. 
         Sigue estas pautas al pie de la letra:
         
         **Tono y estilo**  
