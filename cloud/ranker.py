@@ -35,7 +35,4 @@ def choose_table(query: str) -> str:
     torch.cuda.empty_cache()
     best_idx=int(torch.argmax(torch.tensor(scores, device="cpu")))
     choose=list(table_docs.keys())[best_idx]
-    if choose=="GENERALES":
-        return choose
-    else:
-        return table_desc[choose]
+    return choose

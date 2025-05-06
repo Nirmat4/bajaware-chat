@@ -12,40 +12,16 @@ from rich.markup import escape
 
 prompt_history, llm_history, menu="", "", ""
 while menu!="S":
-    print("[bold cyan]ingresa las fuentes de busqueda\nA - SQL\nB - JQL\nC - embeddings[/]")
-    module=input(">> ")
+    print("[bold cyan]ingresa tu consulta, recuerda colocar las siglas de las fuentes que quieres consultar\n[/][bold gold1]A - SQL\nB - JQL\nC - embeddings[/]")
     prompt=input(">> ")
-    if prompt=="S": break
     format_prompt=clean_prompt(prompt)
-    print(f"[bold bright_white]{format_prompt}[/]")
-    flag=init_flag(prompt_history)
-    if flag: prompt_history=format_prompt
-    if not flag: prompt_history=re.sub(r' -- (VIGENTE=0|\(VIGENTE=1\))', '', prompt_history)+"\n"+format_prompt
-    if "B" in module: print(module)
-    if "C" in module: muestreo, empty_message, query, context=desc_search(format_prompt)
-    if "A" in module: muestreo, empty_message, query, context=sql_search(prompt_history)
-    prompt_history+=f"\n{query}\n"
-    print(f"[bold magenta]hisotrial:[/]\n[magenta]{prompt_history}[/magenta]")
-    final_prompt=prompt_llm(llm_history, muestreo, empty_message, prompt, context)
-    print(f"[bold blue]prompt:[/]\n[blue]{escape(final_prompt)}[/blue]")
-    stream=chat(
-        model=model,
-        messages=[{
-            'role': 'user',
-            'content': final_prompt
-        }],
-        stream=True,
-    )
-    # -- Generacion de respuesta --
-    print(f"[bold light_steel_blue]respuesta llm:[/]")
-    llm_response=""
-    for chunk in stream:
-        print(f"[light_steel_blue]{chunk['message']['content']}[/light_steel_blue]", end='', flush=True)
-        llm_response+=(chunk['message']['content'])
-    print()
-
-    llm_history=clean_chat(llm_response, llm_history, prompt)
-
-    # -- Eliminacion de la memoria --
-    subprocess.run(['ollama', 'stop', model])
-    time.sleep(1)
+    print(f"[bold green]{format_prompt}[/]")
+    if prompt=="S": break
+    fuentes_info=prompt.split(" ", 1)
+    context=""
+    if "A" in fuentes_info[0]:
+        muestreo, empty_message, query, temp_context=sql_search(format_prompt)
+        context+=f"{temp_context}\n"
+    if "B" in fuentes_info[0]: print("JQL")
+    if "C" in fuentes_info[0]: print("EMB")
+    print(context)
