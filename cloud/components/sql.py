@@ -43,7 +43,8 @@ def sql_search(prompt):
     except Exception as e:
         print(f"[red]error en la ejecucion de la consulta: {e}[/red]")
     muestreo, empty_message=muest_empt(num_rows, context)
-    history_prompt.append(f"{prompt}\n{response.replace("\n", "")}\n\n")
+    response=response.replace("\n", "")
+    history_prompt.append(f"{prompt}\n{response}\n\n")
     history_table.append(table)
     
-    return muestreo, empty_message, response.replace("\n", ""), context.to_string(index=False)
+    return muestreo, empty_message, response, context.to_string(index=False)
