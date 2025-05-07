@@ -1,8 +1,6 @@
 from transformers import AutoTokenizer, AutoModel
 import torch
-import gc
-import time
-from components.commons import modules, table_docs, table_desc, jina_path, device
+from components.commons import modules, table_docs, jina_path, device
 
 jina=AutoModel.from_pretrained(
     jina_path, 

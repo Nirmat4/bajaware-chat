@@ -5,33 +5,55 @@ import sqlite3
 import gc
 import time
 import torch
-from components.commons import db_path, data, muest_empt
+from components.commons import db_path
+import faiss
 from rich import print
+import re
+from tabulate import tabulate
 conn=sqlite3.connect(db_path)
+model=SentenceTransformer("sentence-transformers/LaBSE")
+
+def clean_text(text):
+    text=str(text).lower()
+    text=re.sub(r'[^\w\s]', '', text)
+    return text.strip()
+
+df=pd.read_sql_query("SELECT * FROM INVENTARIO_REPORTES", conn)
+df['clave']=df['CLAVE_REP'].apply(clean_text)
+df['nombre_limpio']=df['REPORTE'].apply(clean_text)
+df['descripcion_limpia']=df['DESCRIPCION_ESP'].apply(clean_text)
+
+dimension=model.get_sentence_embedding_dimension()
+index=faiss.IndexFlatL2(dimension)
+
+row_ids=[]
+for columna in ['clave', 'nombre_limpio', 'descripcion_limpia']:
+    emb=model.encode(df[columna].tolist(), show_progress_bar=True).astype(np.float32)
+    index.add(emb)
+    row_ids.extend(df.index.tolist())
+
+row_ids=np.array(row_ids)
 
 def desc_search(prompt):
-    transformer_model=SentenceTransformer("hiiamsid/sentence_similarity_spanish_es")
-    embedding=transformer_model.encode(prompt.replace("reportes", "").replace("reporte", ""))
-    # -- Buscamo el mas cercano --
-    distances=[]
-    for clave, info in data.items():
-        dist=np.linalg.norm(np.array(info["EMBEDDING"])-np.array(embedding))
-        distances.append((dist, info))
-    # -- Ordenamos por distancia --
-    distances.sort(key=lambda x: x[0])
-    # -- Guardamos los 10 mas cercasnos (solo CLAVE_REP) --
-    closest_ids=[]
-    closest_ids=[info["CLAVE_REP"] for _, info in distances[:10]]
-    # -- Con los IDs creamos el dataframe --
-    response="SELECT * FROM INVENTARIO_REPORTES WHERE CLAVE_REP IN ({})".format(",".join(f"'{id}'" for id in closest_ids))
-    print(f"[bold cyan]query:[/] [cyan]{response}[/cyan]")
-    query_result=pd.read_sql_query(response, conn)
-    num_rows=len(query_result)
-    context=query_result.sample(n=min(10, num_rows), random_state=42)
-    muestreo, empty_message=muest_empt(num_rows, context)
-    # -- Eliminacion de memoria --
-    del transformer_model
-    gc.collect()
-    torch.cuda.empty_cache()
-    time.sleep(1)
-    return muestreo, empty_message, response, context.to_string(index=False)
+    q_emb=model.encode([clean_text(prompt)]).astype(np.float32)
+    D, I=index.search(q_emb, 50)
+
+    df_indices=row_ids[I[0]]
+    similitudes=1 - D[0] / 4
+
+    cols_a_omitir=['clave', 'nombre_limpio', 'descripcion_limpia']
+    all_cols=[c for c in df.columns if c not in cols_a_omitir]
+
+    resultados=df.loc[df_indices, all_cols].copy()
+    resultados['similitud']=similitudes
+
+    umbral=similitudes.mean()
+    filtrados=resultados[resultados['similitud'] > umbral]
+
+    context_df=(
+        filtrados
+        .sort_values(by='similitud', ascending=False)
+        .drop(columns=['similitud'])
+    )
+
+    return tabulate(context_df, headers='keys', tablefmt='grid')

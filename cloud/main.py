@@ -1,4 +1,4 @@
-from nlpModel import clean_prompt
+from nlp import clean_prompt
 from components.commons import init_flag
 from components.sql import sql_search
 from components.desciption import desc_search
@@ -15,15 +15,20 @@ while menu!="S":
     print("[bold cyan]ingresa tu consulta, recuerda colocar las siglas de las fuentes que quieres consultar\n[/][bold gold1]A - SQL\nB - JQL\nC - embeddings[/]")
     prompt=input(">> ")
     if prompt=="S": break
+    
     prompt_secciones=prompt.split(" ", 1)
     fuentes_info=prompt_secciones[0]
     prompt=prompt_secciones[1]
     format_prompt=clean_prompt(prompt)
     print(f"[bold green]{format_prompt}[/]")
+    
     context=""
     if "A" in fuentes_info:
-        muestreo, empty_message, query, temp_context=sql_search(format_prompt)
+        temp_context=sql_search(format_prompt)
         context+=f"{temp_context}\n"
     if "B" in fuentes_info: print("JQL")
-    if "C" in fuentes_info: print("EMB")
-    print(context)
+    if "C" in fuentes_info: 
+        temp_context=desc_search(format_prompt)
+        context+=f"{temp_context}\n"
+    
+    print(f"[bold dark_orange]{context}[/]")

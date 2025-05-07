@@ -4,8 +4,9 @@ from ollama import chat
 import time
 import sqlite3
 import pandas as pd
-from components.commons import db_path, prompt_sql, sql_model, muest_empt, table_desc
+from components.commons import db_path, prompt_sql, sql_model, table_desc
 from rich import print
+from tabulate import tabulate
 conn=sqlite3.connect(db_path)
 
 history_prompt=[]
@@ -13,6 +14,7 @@ history_table=[]
 def sql_search(prompt):
     choose=choose_table(prompt)
     original_prompt=prompt
+
     if choose=="GENERALES":
         if len(history_prompt)>0: prompt=f"{history_prompt[-1]}{prompt}"
         table=""
@@ -28,14 +30,7 @@ def sql_search(prompt):
         text=prompt_sql(prompt, table)
 
 
-    stream=chat(
-        model=sql_model,
-        messages=[{
-            'role': 'user',
-            'content': text
-        }],
-        stream=True
-    )
+    stream=chat(model=sql_model, messages=[{'role': 'user', 'content': text}], stream=True)
     response=""
     for chunk in stream:
         print(f"[cyan]{chunk['message']['content']}[/cyan]", end='', flush=True)
@@ -47,11 +42,12 @@ def sql_search(prompt):
         query_result=pd.read_sql_query(response, conn)    
         num_rows=len(query_result)
         context=query_result.sample(n=min(10, num_rows), random_state=42)
+        context=tabulate(context, headers='keys', tablefmt='grid')
     except Exception as e:
-        print(f"[red]error en la ejecucion de la consulta: {e}[/red]")
-    muestreo, empty_message=muest_empt(num_rows, context)
+        print(f"[red]error en la ejecución de la consulta: {e}[/red]")
+    
     response=response.replace("\n", "")
     history_prompt.append(f"{original_prompt}\n{response}\n\n")
     history_table.append(table)
     
-    return muestreo, empty_message, response, context.to_string(index=False)
+    return context
