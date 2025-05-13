@@ -7,6 +7,7 @@ import os
 import uuid
 from rich.status import Status
 import logging
+import subprocess
 
 app = Flask(__name__)
 logging.getLogger('werkzeug').setLevel(logging.ERROR)
@@ -42,6 +43,7 @@ def handle_prompt():
             for chunk in stream:
                 response+=(chunk['message']['content'])
                 yield chunk["message"]["content"]
+        subprocess.run(['ollama', 'stop', "qwen3:30b-a3b"])
         print(f"[bold sky_blue2]{response}[/]")
     
     return Response(generate(), mimetype="text/plain")
