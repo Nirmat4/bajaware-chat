@@ -5,8 +5,11 @@ from ollama import chat
 import json
 import os
 import uuid
+from rich.status import Status
+import logging
 
 app = Flask(__name__)
+logging.getLogger('werkzeug').setLevel(logging.ERROR)
 CORS(app)
 
 SPACES_FILE = "database/spaces.json"
@@ -25,18 +28,22 @@ if not os.path.exists(MESSAGES_FILE):
 def handle_prompt():
     data = request.get_json()
     prompt = data.get("prompt", "")
+    model = data.get("model", "")
 
-    print(f"[bold green]{prompt}[/]")
-
+    print(f"[bold medium_spring_green]prompt: {prompt} model: {model}[/]")
     def generate():
         stream = chat(
             model="qwen3:30b-a3b",
             messages=[{"role": "user", "content": prompt}],
             stream=True,
         )
-        for chunk in stream:
-            yield chunk["message"]["content"]
-
+        response=""
+        with Status("[bold light_steel_blue]generating response...[/]", spinner="dots", spinner_style="light_steel_blue bold") as status:
+            for chunk in stream:
+                response+=(chunk['message']['content'])
+                yield chunk["message"]["content"]
+        print(f"[bold sky_blue2]{response}[/]")
+    
     return Response(generate(), mimetype="text/plain")
 
 
