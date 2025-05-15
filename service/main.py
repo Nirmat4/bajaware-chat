@@ -7,6 +7,7 @@ import os
 import uuid
 from rich.status import Status
 import logging
+from components.sql import sql_search
 import subprocess
 
 app = Flask(__name__)
@@ -30,8 +31,55 @@ def handle_prompt():
     data = request.get_json()
     prompt = data.get("prompt", "")
     model = data.get("model", "")
+    sql = data.get("sql", "")
+    jql = data.get("jql", "")
+    emb = data.get("emb", "")
+    flags = {
+        "sql": bool(sql),
+        "jql": bool(jql),
+        "emb": bool(emb),
+    }
+    tasks = [name for name, enabled in flags.items() if enabled]
 
-    print(f"[bold medium_spring_green]prompt: {prompt} model: {model}[/]")
+    print(f"[bold medium_spring_green]prompt: {prompt} model: {model} tasks: {tasks}[/]")
+    context=""
+    if "sql" in tasks: 
+        print("[bold yellow1]🚀 ejecutando sql_search[/]")
+        context+=sql_search(prompt)
+
+    if len(tasks)!=0:
+        prompt=f'''
+        <system>
+        Eres un asistente especializado en análisis de datos financieros mexicanos. 
+        Tu tarea es **leer** el resultado crudo de una consulta SQL y volcarlo en lenguaje natural, sin transformarlo ni resumirlo antes de que se formule la pregunta.
+        </system>
+
+        <user>
+        —INICIO_RESULTADO—
+        {context}
+        —FIN_RESULTADO—
+
+        Pregunta: {prompt}
+        </user>
+
+        <assistant>
+        Tono y estilo:
+        • Profesional y cercano  
+        • Terminología propia del sector financiero en México  
+        • Evita estructuras tabulares; presenta todo en párrafos narrativos con sangría  
+
+        Claridad y precisión:
+        • Al mencionar valores, indica siempre la unidad o el contexto (p.ej., montos en MXN, fechas en formato DD/MM/AAAA).  
+        • Refuerza las conclusiones con referencias a campos específicos del resultado cuando sea necesario.  
+
+        Estructura de la respuesta:
+        1. Introducción breve que enmarque la pregunta.  
+        2. Desarrollo en uno o varios párrafos con los hallazgos.  
+        3. Cierre con una recomendación o resumen final.
+
+        Ahora responde a la pregunta basándote **solo** en lo que está entre «—INICIO_RESULTADO—» y «—FIN_RESULTADO—» ya que esa es la respuesta correcta pese a que no lo parezca.
+        </assistant>'''
+    
     def generate():
         stream = chat(
             model="qwen3:30b-a3b",
