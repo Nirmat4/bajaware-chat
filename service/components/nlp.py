@@ -2,6 +2,7 @@ import spacy
 from spacy.language import Language
 import hjson
 import re
+from rich import print
 
 nlp=spacy.load("es_core_news_lg")
 with open("assets/replacements.hjson", "r") as file:
@@ -18,4 +19,6 @@ def replacer_component(doc):
 nlp.add_pipe("replacer_component", first=True)
 
 def clean_prompt(prompt):
-  return (nlp(prompt)).text
+  text=(nlp(prompt)).text
+  print(f"[bold light_cyan1]{text}[/]")
+  return text
