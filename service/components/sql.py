@@ -5,8 +5,10 @@ import subprocess
 from rich import print
 from tabulate import tabulate
 import pandas as pd
+from components.nlp import clean_prompt
 
 def sql_search(prompt):
+  prompt=clean_prompt(prompt)
   conn=sqlite3.connect("database/database.db")
   prompt_compuest=f'''
   ### Instructions:
@@ -75,13 +77,15 @@ def sql_search(prompt):
       for chunk in stream:
           response+=(chunk['message']['content'])
   subprocess.run(['ollama', 'stop', "duckdb-nsql:7b"])
-  print(f"[bold sky_blue2]{response.split('```')[0]}[/]")
+  response=response.split('```')[0].strip()
+  print(f"[bold sky_blue2]{response}[/]")
 
   try:
     query_result=pd.read_sql_query(response, conn)    
     num_rows=len(query_result)
     context=query_result.sample(n=min(10, num_rows), random_state=42)
     context=tabulate(context, headers='keys', tablefmt='grid')
+    context=f"{response}\n{context}"
     print(f"[bold dark_sea_green2]{context}[/]")
   except Exception as e:
     print(f"[bold red]error en la ejecución de la consulta: {e}[/red]")
